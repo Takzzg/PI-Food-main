@@ -1,3 +1,6 @@
+# Exclude APIresults folder
+api/APIresults/
+
 # Logs
 logs
 *.log
