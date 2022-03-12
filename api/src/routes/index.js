@@ -9,39 +9,53 @@ const fs = require("fs")
 const router = Router()
 const baseUrl = "https://api.spoonacular.com/recipes"
 const apiKey = `&apiKey=${process.env.SPOONACULAR_API_KEY}`
-const readFiles = true
-const wirteFiles = true
 
-// Configurar los routers
-// Ejemplo: router.use('/auth', authRouter);
+const _90path = __dirname + "/../../APIresults/90.json"
 
-router.get("/", (req, res) => {
-    console.log("Get /")
-    res.json({ data: "GET /" })
-})
+const _readFiles = true
+const _wirteFiles = true
+
+const readFile = (path) => {
+    return JSON.parse(fs.readFileSync(path))
+}
+
+const writeFile = (path, data) => {
+    fs.writeFileSync(path, JSON.stringify(data, null, 4))
+}
 
 router.get("/recipes", async (req, res) => {
     console.log("GET /recipes")
-
     let data = {}
 
-    if (readFiles)
-        data = JSON.parse(
-            fs.readFileSync(__dirname + "/../../APIresults/90.json")
-        )
+    if (_readFiles) data = readFile(_90path)
     else {
         let result = await axios.get(
-            `${baseUrl}/complexSearch?number=90${apiKey}`
+            `${baseUrl}/complexSearch?addRecipeInformation=true&number=90${apiKey}`
         )
         data = result.data
-        if (wirteFiles)
-            fs.writeFileSync(
-                __dirname + "/../../APIresults/90.json",
-                JSON.stringify(data, null, 4)
-            )
+        if (_wirteFiles) writeFile(_90path, data)
     }
 
     res.json(data)
+})
+
+router.get("/recipes/:id", async (req, res) => {
+    const { id } = req.params
+    console.log(`GET /recipes/${id}`)
+
+    let recipe = {}
+
+    if (_readFiles) {
+        const result = readFile(_90path)
+        recipe = result.results.find((r) => r.id === parseInt(id))
+    } else {
+        console.log(id)
+        const result = await axios.get(`${baseUrl}/${id}/information?${apiKey}`)
+        recipe = result.data
+    }
+
+    if (!recipe) return res.status(404).send(`No recipe with id: ${id} found`)
+    res.status(200).json(recipe)
 })
 
 router.post("/recipes", (req, res) => {
