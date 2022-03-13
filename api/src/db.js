@@ -4,6 +4,9 @@ const fs = require("fs")
 const path = require("path")
 const { DB_USER, DB_PASSWORD, DB_HOST } = process.env
 
+const basename = path.basename(__filename)
+const modelDefiners = []
+
 const sequelize = new Sequelize(
     `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/food`,
     {
@@ -11,9 +14,6 @@ const sequelize = new Sequelize(
         native: false // lets Sequelize know we can use pg-native for ~30% more speed
     }
 )
-const basename = path.basename(__filename)
-
-const modelDefiners = []
 
 // Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
 fs.readdirSync(path.join(__dirname, "/models"))
@@ -40,10 +40,13 @@ sequelize.models = Object.fromEntries(capsEntries)
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Recipe } = sequelize.models
+const { Recipe, Diet } = sequelize.models
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
+
+Recipe.belongsToMany(Diet, { through: "diet_recipe" })
+Diet.belongsToMany(Recipe, { through: "diet_recipe" })
 
 module.exports = {
     ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

@@ -2,6 +2,7 @@ require("dotenv").config()
 const { Router } = require("express")
 const axios = require("axios").default
 const fs = require("fs")
+const { Diet, Recipe } = require("../db")
 
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
@@ -23,17 +24,26 @@ const writeFile = (path, data) => {
     fs.writeFileSync(path, JSON.stringify(data, null, 4))
 }
 
+const fetch = async (url) => {
+    const result = await axios.get(url)
+    return result.data.results
+}
+
 router.get("/recipes", async (req, res) => {
     console.log("GET /recipes")
-    let data = {}
+    let data = []
 
-    if (_readFiles) data = readFile(_90path)
-    else {
-        let result = await axios.get(
+    if (_readFiles) {
+        let files = readFile(_90path)
+        let pg = await Recipe.findAll()
+        data = [...pg, ...files]
+    } else {
+        let api = await fetch(
             `${baseUrl}/complexSearch?addRecipeInformation=true&number=90${apiKey}`
         )
-        data = result.data
-        if (_wirteFiles) writeFile(_90path, data)
+        if (_wirteFiles) writeFile(_90path, api)
+        let pg = await Recipe.findAll()
+        data = [...pg, ...api]
     }
 
     res.json(data)
@@ -45,9 +55,13 @@ router.get("/recipes/:id", async (req, res) => {
 
     let recipe = {}
 
+    if (id.length === 36) {
+        let pg = await Recipe.findByPk(id)
+        if (pg) return res.status(200).json(pg)
+    }
     if (_readFiles) {
         const result = readFile(_90path)
-        recipe = result.results.find((r) => r.id === parseInt(id))
+        recipe = result.find((r) => r.id === parseInt(id))
     } else {
         console.log(id)
         const result = await axios.get(`${baseUrl}/${id}/information?${apiKey}`)
@@ -58,14 +72,32 @@ router.get("/recipes/:id", async (req, res) => {
     res.status(200).json(recipe)
 })
 
-router.post("/recipes", (req, res) => {
+router.post("/recipes", async (req, res) => {
     console.log("POST /recipes")
-    res.json({ data: "POST /recipes" })
+
+    const { name, summary, score, healthScore, instructions, diets } = req.body
+
+    if (!name || !summary || !diets)
+        return res.status(422).send("Missing necessary information")
+
+    const recipe = await Recipe.create({
+        name,
+        summary,
+        score,
+        healthScore,
+        instructions,
+        diets
+    })
+
+    recipe.setDiets(diets)
+
+    res.status(201).json(recipe)
 })
 
-router.get("/types", (req, res) => {
+router.get("/types", async (req, res) => {
     console.log("GET /types")
-    res.json({ data: "GET /types" })
+    const types = await Diet.findAll()
+    res.json(types)
 })
 
 module.exports = router

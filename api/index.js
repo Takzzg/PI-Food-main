@@ -18,11 +18,39 @@
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require("./src/app.js")
-const { conn } = require("./src/db.js")
+const { conn, Diet, Recipe } = require("./src/db.js")
+
+const dietTypes = [
+    "Gluten Free",
+    "Ketogenic",
+    "Vegetarian",
+    "Lacto-Vegetarian",
+    "Ovo-Vegetarian",
+    "Vegan",
+    "Pescetarian",
+    "Paleo",
+    "Primal",
+    "Low FODMAP",
+    "Whole30"
+]
 
 // Syncing all the models at once.
 conn.sync({ force: true }).then(() => {
     server.listen(3001, () => {
         console.log("%s listening at 3001") // eslint-disable-line no-console
+
+        dietTypes.forEach((diet) => Diet.create({ name: diet }))
+
+        Recipe.create({
+            name: "Pizza",
+            summary: "Pizza de cebolla",
+            score: 100,
+            healthScore: 10,
+            instructions: [
+                "Preparas la pizza",
+                "La metes en el horno",
+                "Disfrutas"
+            ]
+        })
     })
 })
