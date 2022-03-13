@@ -1,6 +1,4 @@
 const { DataTypes } = require("sequelize")
-// Exportamos una funcion que define el modelo
-// Luego le injectamos la conexion a sequelize.
 
 function checkString(value) {
     if (typeof value !== "string")
@@ -8,7 +6,6 @@ function checkString(value) {
 }
 
 module.exports = (sequelize) => {
-    // defino el modelo
     sequelize.define("recipe", {
         id: {
             type: DataTypes.UUID,

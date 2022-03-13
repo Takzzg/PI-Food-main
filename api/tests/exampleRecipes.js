@@ -30,4 +30,9 @@ const recipe2 = {
     ]
 }
 
-module.exports = { recipe1, recipe2 }
+const minRecipe = {
+    name: "Empanadas",
+    summary: "Empanadas de carne"
+}
+
+module.exports = { recipe1, recipe2, minRecipe }
