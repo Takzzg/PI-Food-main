@@ -90,8 +90,11 @@ router.post("/recipes", async (req, res) => {
     })
 
     recipe.setDiets(diets)
-
     res.status(201).json(recipe)
+
+    // let test = { ...recipe }
+    // delete test.name
+    // res.status(201).json(test)
 })
 
 router.get("/types", async (req, res) => {
