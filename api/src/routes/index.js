@@ -35,7 +35,7 @@ router.get("/recipes", async (req, res) => {
 
     if (_readFiles) {
         let files = readFile(_90path)
-        let pg = await Recipe.findAll()
+        let pg = await Recipe.findAll({ include: Diet })
         data = [...pg, ...files]
     } else {
         let api = await fetch(
@@ -56,7 +56,7 @@ router.get("/recipes/:id", async (req, res) => {
     let recipe = {}
 
     if (id.length === 36) {
-        let pg = await Recipe.findByPk(id)
+        let pg = await Recipe.findByPk(id, { include: Diet })
         if (pg) return res.status(200).json(pg)
     }
     if (_readFiles) {
@@ -85,8 +85,7 @@ router.post("/recipes", async (req, res) => {
         summary,
         score,
         healthScore,
-        instructions,
-        diets
+        instructions
     })
 
     recipe.setDiets(diets)

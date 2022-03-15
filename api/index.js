@@ -36,14 +36,15 @@ const dietTypes = [
 
 // Syncing all the models at once.
 conn.sync({ force: true }).then(() => {
-    server.listen(3001, () => {
+    server.listen(3001, async () => {
         console.log("%s listening at 3001") // eslint-disable-line no-console
 
         dietTypes.forEach((diet) => Diet.create({ name: diet }))
 
-        Recipe.create({
+        let pizza = await Recipe.create({
             name: "Pizza",
-            summary: "Pizza de cebolla",
+            summary:
+                "Pizza de cebolla, pertenece a todos los tipos de dietas existentes",
             score: 100,
             healthScore: 10,
             instructions: [
@@ -52,5 +53,8 @@ conn.sync({ force: true }).then(() => {
                 "Disfrutas"
             ]
         })
+
+        let dietsId = await Diet.findAll({ raw: true, attributes: ["id"] })
+        pizza.setDiets(dietsId.map((d) => d.id))
     })
 })
