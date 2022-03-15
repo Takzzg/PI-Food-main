@@ -1,0 +1,25 @@
+.Navbar {
+    background-color: slategray;
+    padding: 0 1rem;
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+
+    .NavLink {
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: whitesmoke;
+        border-bottom: 2px solid transparent;
+
+        &.active {
+            border-color: white;
+        }
+
+        .logo {
+            height: 4rem;
+            padding: 0;
+        }
+    }
+}
