@@ -21,17 +21,18 @@ const server = require("./src/app.js")
 const { conn, Diet, Recipe } = require("./src/db.js")
 
 const dietTypes = [
-    "Gluten Free",
-    "Ketogenic",
+    "Vegan",
     "Vegetarian",
     "Lacto-Vegetarian",
     "Ovo-Vegetarian",
-    "Vegan",
     "Pescatarian",
-    "Paleo",
-    "Primal",
+    "Ketogenic",
+    "Gluten Free",
+    "Dairy Free",
+    "Whole30",
     "Low FODMAP",
-    "Whole30"
+    "Paleo",
+    "Primal"
 ]
 
 // Syncing all the models at once.

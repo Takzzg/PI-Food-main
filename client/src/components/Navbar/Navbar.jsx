@@ -14,7 +14,7 @@ export const Navbar = () => {
                 <img src={logo} alt="logo" className={styles.logo} />
             </NavLink>
             <NavLink className={setClass} to="/home">
-                Home
+                Inicio
             </NavLink>
         </div>
     )

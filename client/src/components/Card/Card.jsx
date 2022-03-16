@@ -1,14 +1,24 @@
 import React from "react"
+import { Link } from "react-router-dom"
+
+import stock from "../../assets/stock.jpg"
+import styles from "./Card.module.scss"
+import { DietBadge } from "./DietBagde/DietBadge"
 
 export const Card = ({ recipe }) => {
     const { id, name, title, diets, image } = recipe
 
     return (
-        <div>
-            <img src={image} alt="image" />
-            {name || title}
-            {diets &&
-                diets.map((d) => <div key={d.id || d}>{d.name || d}</div>)}
-        </div>
+        <Link className={styles.card} to={`/recipes/${id}`}>
+            <div className={styles.image}>
+                <img src={image || stock} alt="Recipe" />
+            </div>
+            <div className={styles.title}>{name || title}</div>
+            <div className={styles.diets}>
+                {diets.map((d) => (
+                    <DietBadge key={d.id} diet={d} />
+                ))}
+            </div>
+        </Link>
     )
 }

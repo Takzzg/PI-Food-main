@@ -1,0 +1,13 @@
+.home {
+    max-width: 100vw;
+    padding: 1rem;
+}
+
+.cardsContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+
+    max-width: 1200px;
+    margin: auto;
+}
