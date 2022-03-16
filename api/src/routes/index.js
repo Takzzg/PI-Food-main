@@ -39,7 +39,7 @@ router.get("/recipes", async (req, res) => {
         data = [...pg, ...files]
     } else {
         let api = await fetch(
-            `${baseUrl}/complexSearch?addRecipeInformation=true&number=90${apiKey}`
+            `${baseUrl}/complexSearch?addRecipeInformation=true&number=100${apiKey}`
         )
         if (_wirteFiles) writeFile(_90path, api)
         let pg = await Recipe.findAll()
