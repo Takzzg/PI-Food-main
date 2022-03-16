@@ -27,7 +27,7 @@ const dietTypes = [
     "Lacto-Vegetarian",
     "Ovo-Vegetarian",
     "Vegan",
-    "Pescetarian",
+    "Pescatarian",
     "Paleo",
     "Primal",
     "Low FODMAP",
