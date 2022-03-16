@@ -35,31 +35,41 @@ export const Pagination = ({ recipes }) => {
                 onClick={() => handleChangePage(page + 1)}
                 disabled={page === lastPageNum}
             >
-                &gt; Siguiente
+                Siguiente &gt;
             </button>
         </div>
     )
 
     const PageButtons = () => {
-        let btnCount = 5
+        let btnCount = 10
         let buttons = []
 
-        if (page < btnCount - Math.floor(btnCount / 2))
+        if (page <= btnCount - Math.floor(btnCount / 2))
             for (let i = 1; i <= btnCount; i++) buttons.push(i)
-        else if (page > lastPageNum - btnCount + Math.floor(btnCount / 2))
+        else if (page >= lastPageNum - Math.floor(btnCount / 2))
             for (let i = btnCount; i > 0; i--) buttons.push(lastPageNum - i + 1)
-        else for (let i = page - 2; i <= page + 2; i++) buttons.push(i)
+        else
+            for (
+                let i = page - Math.floor(btnCount / 2);
+                i <= page + Math.floor(btnCount / 2);
+                i++
+            )
+                buttons.push(i)
 
-        return buttons.map((i) => (
-            <button
-                className={styles.pageBtn}
-                onClick={() => handleChangePage(i)}
-                disabled={page === i}
-                key={i}
-            >
-                {i}
-            </button>
-        ))
+        return (
+            <span className={styles.pagesContainer}>
+                {buttons.map((i) => (
+                    <button
+                        className={styles.pageBtn}
+                        onClick={() => handleChangePage(i)}
+                        disabled={page === i}
+                        key={i}
+                    >
+                        {i}
+                    </button>
+                ))}
+            </span>
+        )
     }
 
     return (
