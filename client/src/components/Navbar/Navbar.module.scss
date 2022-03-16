@@ -1,5 +1,7 @@
+@import "../../utils.scss";
+
 .Navbar {
-    background-color: slategray;
+    background-color: $palette4;
     padding: 0 1rem;
     display: flex;
     align-items: stretch;

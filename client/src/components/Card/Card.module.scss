@@ -1,9 +1,29 @@
+@import "../../utils.scss";
+
 .card {
     text-decoration: none;
     color: black;
 
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.4);
+    // background-color: $palette3;
+    // border: 5px solid $palette5;
+    border-radius: 1rem;
+    overflow: hidden;
+
+    transition: transform 0.25s ease-in-out;
+
+    &:hover {
+        transform: scale(1.03);
+    }
+
+    .title,
+    .diets {
+        padding: 0.5rem;
+    }
 
     .title {
         font-size: 1.2rem;
