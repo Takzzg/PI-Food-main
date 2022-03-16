@@ -43,6 +43,7 @@ export const rootReducer = (state = initialState, action) => {
                     if (d.includes("lacto")) addDiet("lacto")
                     if (d.includes("paleo")) addDiet("paleo")
                     if (d.includes("primal")) addDiet("primal")
+                    if (d.includes("pescatarian")) addDiet("pescatarian")
                 })
 
                 if (r.vegetarian) addDiet("vegetarian")
