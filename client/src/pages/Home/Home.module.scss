@@ -5,12 +5,3 @@
     padding: 1rem;
     // background-color: $palette3;
 }
-
-.cardsContainer {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-
-    max-width: 1200px;
-    margin: auto;
-}

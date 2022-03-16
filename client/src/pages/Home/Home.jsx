@@ -2,11 +2,11 @@ import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import {
     fetchDiets,
-    fetchRecipes,
-    fetchDetail,
-    filterRecipes
+    fetchRecipes
+    // fetchDetail,
+    // filterRecipes
 } from "../../actions"
-import { Card } from "../../components"
+import { Pagination } from "../../components/Pagination/Pagination"
 
 import styles from "./Home.module.scss"
 
@@ -30,11 +30,7 @@ const Home = () => {
             <input type="text" name="search" id="search" />
             <button onClick={handleFetchRecipes}>Buscar</button>
 
-            <div className={styles.cardsContainer}>
-                {recipes.map((r) => (
-                    <Card key={r.id} recipe={r} />
-                ))}
-            </div>
+            <Pagination recipes={recipes} />
         </div>
     )
 }
