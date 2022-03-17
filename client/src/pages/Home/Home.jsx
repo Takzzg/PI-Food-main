@@ -78,7 +78,7 @@ const Home = () => {
                         id="orderBy"
                     >
                         <option value={"name"}>Nombre</option>
-                        <option value={"score"}>Puntuacion</option>
+                        <option value={"score"}>Puntaje</option>
                         <option value={"pricePerServing"}>Precio</option>
                     </select>
                     <button name={"orderDir"} onClick={handleToggleDir}>

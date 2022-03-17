@@ -2,10 +2,9 @@
 
 .cardsContainer {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    gap: 1.5rem;
 
-    max-width: 1200px;
+    max-width: 800px;
     margin: auto;
 }
 

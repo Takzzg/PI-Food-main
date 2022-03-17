@@ -81,8 +81,25 @@ export const rootReducer = (state = initialState, action) => {
             }
 
             filtered.sort((a, b) => {
-                let fieldA = orderBy === "name" ? a.name || a.title : a[orderBy]
-                let fieldB = orderBy === "name" ? b.name || b.title : b[orderBy]
+                let fieldA
+                let fieldB
+
+                switch (orderBy) {
+                    case "name":
+                        fieldA = a.name || a.title
+                        fieldB = b.name || b.title
+                        break
+
+                    case "score":
+                        fieldA = a.score || a.spoonacularScore
+                        fieldB = b.score || b.spoonacularScore
+                        break
+
+                    default:
+                        fieldA = a[orderBy]
+                        fieldB = b[orderBy]
+                        break
+                }
 
                 if (fieldA > fieldB) return 1
                 if (fieldA < fieldB) return -1
@@ -91,7 +108,6 @@ export const rootReducer = (state = initialState, action) => {
 
             if (dir === "desc") filtered.reverse()
 
-            // console.log(action.payload, filtered)
             return { ...state, filteredRecipes: filtered }
 
         case SET_DETAIL:
