@@ -58,7 +58,32 @@ export const rootReducer = (state = initialState, action) => {
             return { ...state, allRecipes: recipes }
 
         case FILTER_RECIPES:
-            return { ...state, filteredRecipes: action.payload }
+            const { name, diet, orderBy, dir } = action.payload
+
+            // console.log(orderBy)
+            let filtered = [...state.allRecipes]
+
+            if (name)
+                filtered = filtered.filter(
+                    (r) =>
+                        (r.name && r.name.toLowerCase().includes(name)) ||
+                        (r.title && r.title.toLowerCase().includes(name))
+                )
+
+            if (diet !== "Todas") {
+                let dietMatch = []
+                filtered.forEach((r) => {
+                    r.diets.forEach((d) => {
+                        if (d.id === diet) dietMatch.push(r)
+                    })
+                })
+                filtered = [...dietMatch]
+            }
+
+            if (orderBy === "name") filtered.sort((a, b) => a.name - b.name)
+
+            // console.log(action.payload, filtered)
+            return { ...state, filteredRecipes: filtered }
 
         case SET_DETAIL:
             return { ...state, detailRecipe: action.payload }
