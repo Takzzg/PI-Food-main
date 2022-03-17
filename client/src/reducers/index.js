@@ -60,7 +60,7 @@ export const rootReducer = (state = initialState, action) => {
         case FILTER_RECIPES:
             const { name, diet, orderBy, dir } = action.payload
 
-            // console.log(orderBy)
+            console.log(dir)
             let filtered = [...state.allRecipes]
 
             if (name)
@@ -70,7 +70,7 @@ export const rootReducer = (state = initialState, action) => {
                         (r.title && r.title.toLowerCase().includes(name))
                 )
 
-            if (diet !== "Todas") {
+            if (diet !== "all") {
                 let dietMatch = []
                 filtered.forEach((r) => {
                     r.diets.forEach((d) => {
@@ -80,7 +80,16 @@ export const rootReducer = (state = initialState, action) => {
                 filtered = [...dietMatch]
             }
 
-            if (orderBy === "name") filtered.sort((a, b) => a.name - b.name)
+            filtered.sort((a, b) => {
+                let fieldA = orderBy === "name" ? a.name || a.title : a[orderBy]
+                let fieldB = orderBy === "name" ? b.name || b.title : b[orderBy]
+
+                if (fieldA > fieldB) return 1
+                if (fieldA < fieldB) return -1
+                return 0
+            })
+
+            if (dir === "desc") filtered.reverse()
 
             // console.log(action.payload, filtered)
             return { ...state, filteredRecipes: filtered }

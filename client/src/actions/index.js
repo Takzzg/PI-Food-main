@@ -13,7 +13,6 @@ export const fetchRecipes = () => (dispatch) =>
     axios
         .get(`${baseUrl}/recipes`)
         .then((res) => dispatch({ type: FETCH_RECIPES, payload: res.data }))
-// .then(() => dispatch({ type: FILTER_RECIPES }))
 
 export const fetchDetail = (id) => (dispatch) =>
     axios

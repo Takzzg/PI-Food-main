@@ -18,7 +18,7 @@ const Home = () => {
 
     const [formState, setFormState] = useState({
         name: "",
-        diet: "Todas",
+        diet: "all",
         orderBy: "name",
         orderDir: "asc"
     })
@@ -60,7 +60,7 @@ const Home = () => {
                         id="diet"
                         value={formState.diet}
                     >
-                        <option value={"Todas"}>Todas</option>
+                        <option value={"all"}>Todas</option>
                         {allDiets.map((d) => (
                             <option key={d.id} value={d.id}>
                                 {d.name}
