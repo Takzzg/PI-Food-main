@@ -1,25 +1,25 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Card } from "../Card/Card"
 
 import styles from "./Pagination.module.scss"
 
 export const Pagination = ({ recipes }) => {
     const [page, setPage] = useState(1)
-    const pageBtnContainer = useRef(null)
 
-    const lastPageNum = Math.ceil(recipes.length / 9)
+    let lastPageNum = Math.ceil(recipes.length / 9)
+
+    useEffect(() => {
+        setPage(1)
+    }, [recipes])
 
     const selectRecipes = () => {
         return recipes.slice((page - 1) * 9, (page - 1) * 9 + 9)
     }
     let selectedRecipes = selectRecipes()
 
-    useEffect(() => {
-        selectedRecipes = selectRecipes()
-    }, [page, pageBtnContainer])
-
     const handleChangePage = (val) => {
         setPage(val)
+        selectedRecipes = selectRecipes()
     }
 
     const Controls = () => (
@@ -41,20 +41,26 @@ export const Pagination = ({ recipes }) => {
     )
 
     const PageButtons = () => {
-        let btnCount = 10
         let buttons = []
+        let btnCount = 3
+        let startI, endI
 
-        if (page <= btnCount - Math.floor(btnCount / 2))
-            for (let i = 1; i <= btnCount; i++) buttons.push(i)
-        else if (page >= lastPageNum - Math.floor(btnCount / 2))
-            for (let i = btnCount; i > 0; i--) buttons.push(lastPageNum - i + 1)
-        else
-            for (
-                let i = page - Math.floor(btnCount / 2);
-                i <= page + Math.floor(btnCount / 2);
-                i++
-            )
-                buttons.push(i)
+        if (page <= btnCount) {
+            startI = 1
+            endI = startI + btnCount * 2
+            if (endI > lastPageNum) endI = lastPageNum
+        } else if (page > lastPageNum - btnCount) {
+            startI = lastPageNum - btnCount * 2
+            endI = lastPageNum
+            if (startI < 1) startI = 1
+        } else {
+            startI = page - btnCount
+            endI = page + btnCount
+            if (endI > lastPageNum) endI = lastPageNum
+            if (startI < 1) startI = 1
+        }
+
+        for (let i = startI; i <= endI; i++) buttons.push(i)
 
         return (
             <span className={styles.pagesContainer}>
@@ -74,13 +80,19 @@ export const Pagination = ({ recipes }) => {
 
     return (
         <div>
-            <Controls />
-            <div className={styles.cardsContainer}>
-                {selectedRecipes.map((r) => (
-                    <Card key={r.id} recipe={r} />
-                ))}
-            </div>
-            <Controls />
+            {recipes.length > 0 ? (
+                <>
+                    <Controls />
+                    <div className={styles.cardsContainer}>
+                        {selectedRecipes.map((r) => (
+                            <Card key={r.id} recipe={r} />
+                        ))}
+                    </div>
+                    <Controls />
+                </>
+            ) : (
+                <h1>No se encontraron recetas</h1>
+            )}
         </div>
     )
 }
