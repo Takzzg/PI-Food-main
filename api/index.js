@@ -31,8 +31,8 @@ const dietTypes = [
     "Dairy Free",
     "Whole30",
     "Low FODMAP",
-    "Paleo",
-    "Primal"
+    "Primal",
+    "Paleo"
 ]
 
 // Syncing all the models at once.
