@@ -13,7 +13,7 @@ const apiKey = `&apiKey=${process.env.SPOONACULAR_API_KEY}`
 
 const _90path = __dirname + "/../../APIresults/90.json"
 
-const _readFiles = true
+const _readFiles = false
 const _wirteFiles = true
 
 const readFile = (path) => {
@@ -42,7 +42,7 @@ router.get("/recipes", async (req, res) => {
             `${baseUrl}/complexSearch?addRecipeInformation=true&number=100${apiKey}`
         )
         if (_wirteFiles) writeFile(_90path, api)
-        let pg = await Recipe.findAll()
+        let pg = await Recipe.findAll({ include: Diet })
         data = [...pg, ...api]
     }
 

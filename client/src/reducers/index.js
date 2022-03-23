@@ -59,8 +59,6 @@ export const rootReducer = (state = initialState, action) => {
 
         case FILTER_RECIPES:
             const { name, diet, orderBy, dir } = action.payload
-
-            console.log(dir)
             let filtered = [...state.allRecipes]
 
             if (name)
