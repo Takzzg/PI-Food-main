@@ -12,9 +12,10 @@ const baseUrl = "https://api.spoonacular.com/recipes"
 const apiKey = `&apiKey=${process.env.SPOONACULAR_API_KEY}`
 
 const _90path = __dirname + "/../../APIresults/90.json"
+const _detail = __dirname + "/../../APIresults/detail.json"
 
-const _readFiles = false
-const _wirteFiles = true
+const _readFiles = true
+const _wirteFiles = false
 
 const readFile = (path) => {
     return JSON.parse(fs.readFileSync(path))
@@ -25,6 +26,7 @@ const writeFile = (path, data) => {
 }
 
 const fetch = async (url) => {
+    console.log(url)
     const result = await axios.get(url)
     return result.data.results
 }
@@ -38,8 +40,9 @@ router.get("/recipes", async (req, res) => {
         let pg = await Recipe.findAll({ include: Diet })
         data = [...pg, ...files]
     } else {
+        console.log("fetching")
         let api = await fetch(
-            `${baseUrl}/complexSearch?addRecipeInformation=true&number=100${apiKey}`
+            `${baseUrl}/complexSearch?addRecipeInformation=true&number=90${apiKey}`
         )
         if (_wirteFiles) writeFile(_90path, api)
         let pg = await Recipe.findAll({ include: Diet })
@@ -52,18 +55,29 @@ router.get("/recipes", async (req, res) => {
 router.get("/recipes/:id", async (req, res) => {
     const { id } = req.params
     console.log(`GET /recipes/${id}`)
+    console.log(id)
+    console.log(typeof id)
 
     let recipe = {}
 
     if (id.length === 36) {
-        let pg = await Recipe.findByPk(id, { include: Diet })
+        let pg = await Recipe.findByPk(id)
+
+        // let all = await Recipe.findAll()
+        // let pgid = await Recipe.findByPk(id)
+        // let pgone = await Recipe.findOne({ where: { id: id }, include: Diet })
+        // console.log("pg = ", pgid, pgone, all)
+
         if (pg) return res.status(200).json(pg)
+        return res.status(404).json({ msg: `No recipe in PSQL with id ${id}` })
     }
+
     if (_readFiles) {
-        const result = readFile(_90path)
-        recipe = result.find((r) => r.id === parseInt(id))
+        recipe = readFile(_detail)
+        // const result = readFile(_90path)
+        // recipe = result.find((r) => r.id === parseInt(id))
     } else {
-        console.log(id)
+        // console.log(id)
         const result = await axios.get(`${baseUrl}/${id}/information?${apiKey}`)
         recipe = result.data
     }
